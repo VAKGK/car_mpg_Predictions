@@ -3,16 +3,15 @@ import joblib
 import numpy as np
 import os
 
+# ==================== PAGE CONFIG - FULL WIDTH ====================
+st.set_page_config(page_title="Car MPG Predictor", page_icon="🚗", layout="wide")
+
 # ==================== CLEAN & ANIMATED UI ====================
 st.markdown("""
 <style>
     #MainMenu, footer, header, .stDeployButton {visibility: hidden !important;}
     .block-container {padding-top: 2rem !important;}
     hr {display: none !important;}
-
-    body {
-        background: linear-gradient(135deg, #eef2ff, #e0e7ff);
-    }
 
     .animated-title {
         font-size: 48px;
@@ -36,7 +35,7 @@ st.markdown("""
     .stButton>button {
         background: linear-gradient(135deg, #4f46e5, #9333ea);
         color: white; border-radius: 12px; padding: 12px 25px;
-        font-size: 20px; border: none; box-shadow: 0 6px 20px rgba(90,50,200,0.25);
+        font-size: 18px; border: none; box-shadow: 0 6px 20px rgba(90,50,200,0.25);
         animation: floatBtn 3s ease-in-out infinite;
     }
     @keyframes floatBtn { 0%,100% {transform: translateY(0);} 50% {transform: translateY(-5px);} }
@@ -55,20 +54,15 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# ==================== LOAD MODEL – FIXED FOR STREAMLIT CLOUD ====================
+# ==================== LOAD MODEL ====================
 @st.cache_resource
 def load_model():
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     scaler_path = os.path.join(BASE_DIR, "scaler.joblib")
     model_path = os.path.join(BASE_DIR, "car_mileage_model.joblib")
 
-    if not os.path.exists(scaler_path):
-        st.error(f"Scaler file not found! Expected at: {scaler_path}")
-        st.info("Make sure both `scaler.joblib` and `car_mileage_model.joblib` are in the same folder as app.py")
-        return None, None
-    if not os.path.exists(model_path):
-        st.error(f"Model file not found! Expected at: {model_path}")
-        st.info("Make sure both `scaler.joblib` and `car_mileage_model.joblib` are in the same folder as app.py")
+    if not os.path.exists(scaler_path) or not os.path.exists(model_path):
+        st.error("Model files not found! Make sure scaler.joblib and car_mileage_model.joblib are in the same folder.")
         return None, None
 
     scaler = joblib.load(scaler_path)
@@ -79,65 +73,91 @@ scaler, model = load_model()
 if scaler is None or model is None:
     st.stop()
 
-# ==================== PAGE CONFIG ====================
-st.set_page_config(page_title="Car MPG Predictor", page_icon="🚗", layout="centered")
-
 # ==================== TITLE ====================
 st.markdown("<h1 class='animated-title'>Car Fuel Efficiency Predictor</h1>", unsafe_allow_html=True)
-st.markdown("<h5 style='text-align:center; color:#6b7280; margin-bottom:50px;'>1970–1982 Classic Cars</h5>", unsafe_allow_html=True)
+st.markdown("<h5 style='text-align:center; color:#6b7280; margin-bottom:40px;'>1970–1982 Classic Cars</h5>", unsafe_allow_html=True)
 
-# ==================== INPUTS ====================
+# ==================== PRESET BUTTONS ====================
+st.markdown("#### 🚀 Quick Presets")
+preset_col1, preset_col2, preset_col3, reset_col = st.columns([1,1,1,1])
+
+with preset_col1:
+    if st.button("🇯🇵 Economy Car", use_container_width=True):
+        st.session_state.preset = "economy"
+
+with preset_col2:
+    if st.button("🇺🇸 Muscle Car", use_container_width=True):
+        st.session_state.preset = "muscle"
+
+with preset_col3:
+    if st.button("👨‍👩‍👧‍👦 Family Sedan", use_container_width=True):
+        st.session_state.preset = "family"
+
+with reset_col:
+    if st.button("🔄 Reset", use_container_width=True):
+        st.session_state.clear()
+        st.rerun()
+
+# Preset defaults
+if st.session_state.get("preset") == "economy":
+    defaults = {"cyl":4, "disp":100, "hp":70, "weight":2200, "acc":18.0, "year":80, "origin":3}
+elif st.session_state.get("preset") == "muscle":
+    defaults = {"cyl":8, "disp":350, "hp":200, "weight":4000, "acc":12.0, "year":74, "origin":1}
+elif st.session_state.get("preset") == "family":
+    defaults = {"cyl":6, "disp":200, "hp":120, "weight":3200, "acc":15.0, "year":78, "origin":1}
+else:
+    defaults = {"cyl":4, "disp":200, "hp":120, "weight":3000, "acc":15.0, "year":78, "origin":3}
+
+# ==================== INPUTS WITH EMOJIS ====================
 col1, col2 = st.columns(2)
 
 with col1:
-    st.markdown("#### Engine & Power 🔥")
-    cylinders = st.number_input("🔢 Number of Cylinders", 3, 8, 4, step=1,
-                                help="Most cars have 4. Muscle cars & trucks have 6 or 8.")
-    displacement = st.number_input("🛢️ Engine Displacement (cu in)", 68.0, 455.0, 200.0, step=10.0,
-                                   help="Small car: 70–150 | Medium: 150–300 | Large: 300–455")
-    horsepower = st.number_input("🐎 Horsepower (HP)", 40, 250, 120, step=5,
-                                 help="Normal: 100–160 HP | Sporty/Muscle: 180–250+ HP")
+    st.markdown("#### 🔥 Engine & Power")
+    cylinders = st.number_input("🔩 Number of Cylinders", 3, 8, defaults["cyl"], step=1,
+                                help="Most cars: 4 | Muscle/V8: 8")
+    displacement = st.number_input("🛢️ Engine Displacement (cu in)", 68.0, 455.0, float(defaults["disp"]), step=10.0,
+                                   help="Small engine: 70–150 | Big V8: 300–455")
+    horsepower = st.number_input("🐎 Horsepower (HP)", 40, 250, defaults["hp"], step=5,
+                                 help="Higher HP usually means lower fuel efficiency")
 
 with col2:
-    st.markdown("#### Weight & Performance 💪")
-    weight = st.number_input("⚖️ Car Weight (lbs)", 1500, 6000, 3000, step=100,
-                             help="Light: 2000–2800 | Average: 3000–4000 | Heavy: 4500+")
-    acceleration = st.number_input("🏁 0–60 mph (seconds)", 8.0, 30.0, 15.0, step=0.5,
-                                   help="Fast: 8–12 sec | Normal: 13–18 sec | Slow: 20+ sec")
+    st.markdown("#### 🚀 Weight & Performance")
+    weight = st.number_input("⚖️ Car Weight (lbs)", 1500, 6000, defaults["weight"], step=100,
+                             help="Light: 2000–2800 | Heavy: 4000+")
+    acceleration = st.number_input("🏁 0–60 mph (seconds)", 8.0, 30.0, defaults["acc"], step=0.5,
+                                   help="Fast: 8–12 sec | Slow: 18+ sec")
     origin = st.selectbox("🌍 Country of Origin", [1, 2, 3],
-                          format_func=lambda x: {1: "USA", 2: "Europe", 3: "Japan"}[x],
-                          index=2,
-                          help="Japanese cars were usually the most fuel-efficient in the 70s–80s!")
+                          format_func=lambda x: {1: "🇺🇸 USA", 2: "🇪🇺 Europe", 3: "🇯🇵 Japan"}[x],
+                          index=defaults["origin"]-1,
+                          help="Japanese & European cars were usually more efficient in this era")
 
-model_year = st.slider("📅 Model Year", 70, 82, 78, help="70 = 1970, 82 = 1982. Newer = slightly better MPG")
-
-# ==================== EXAMPLES ====================
-st.info("""
-**Real-Life Examples**  
-1976 Ford Mustang → USA • 8 cyl • 300 HP • 3800 lbs • year 76 → ~14 MPG (~6.0 km/L)  
-1980 Honda Civic → Japan • 4 cyl • 67 HP • 2000 lbs • year 80 → ~36 MPG (~15.3 km/L)  
-1978 VW Golf/Rabbit → Europe • 4 cyl • 78 HP • 2200 lbs • year 78 → ~31 MPG (~13.2 km/L)
-""")
+model_year = st.slider(
+    "📅 Model Year",
+    min_value=70,
+    max_value=82,
+    value=defaults["year"],
+    step=1,
+    format="19%02d",
+    help="Newer models (late 70s–80s) generally have better fuel efficiency due to regulations"
+)
 
 # ==================== PREDICT BUTTON ====================
 if st.button("Predict Fuel Efficiency Now!", type="primary", use_container_width=True):
-    with st.spinner("Revving up the prediction engine..."):
+    with st.spinner("Calculating fuel efficiency..."):
         X = np.array([[cylinders, displacement, horsepower, weight, acceleration, model_year, origin]])
         prediction = model.predict(scaler.transform(X))[0]
         mpg = round(float(prediction), 1)
-        km_per_liter = round(mpg * 0.425144, 1)  # Accurate conversion: 1 MPG ≈ 0.425144 km/L
+        km_per_liter = round(mpg * 0.425144, 1)
 
     st.markdown("<div style='margin:60px 0'></div>", unsafe_allow_html=True)
 
-    # === SIDE-BY-SIDE MPG & km/L CARDS ===
     col_mpg, col_kml = st.columns(2)
-
     with col_mpg:
         st.markdown(f"""
         <div class="result-card" style="background: linear-gradient(135deg, #5b21b6, #7c3aed);">
             <h1 style="font-size:70px; margin:0; color:white;">{mpg}</h1>
             <h3 style="margin:10px 0 0; color:white; opacity:0.9;">MPG</h3>
-            <p style="margin:5px 0 0; font-size:15px; color:white;">Miles Per Gallon (US Standard)</p>
+            <p style="margin:5px 0 0; font-size:15px; color:white;">Miles Per Gallon</p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -146,27 +166,51 @@ if st.button("Predict Fuel Efficiency Now!", type="primary", use_container_width
         <div class="result-card" style="background: linear-gradient(135deg, #dc2626, #f97316);">
             <h1 style="font-size:70px; margin:0; color:white;">{km_per_liter}</h1>
             <h3 style="margin:10px 0 0; color:white; opacity:0.9;">km/L</h3>
-            <p style="margin:5px 0 0; font-size:15px; color:white;">Kilometers Per Liter (Global)</p>
+            <p style="margin:5px 0 0; font-size:15px; color:white;">Kilometers Per Liter</p>
         </div>
         """, unsafe_allow_html=True)
 
-    st.markdown("<div style='margin:40px 0'></div>", unsafe_allow_html=True)
-    st.caption("🔄 Conversion: 1 MPG ≈ 0.425 km/L | Perfect for comparing US classics with the world!")
+    st.markdown("<div style='margin:30px 0'></div>", unsafe_allow_html=True)
+    st.caption("🔄 1 MPG ≈ 0.425 km/L | Based on UCI Auto MPG Dataset")
 
-    # === Feedback based on MPG ===
     if mpg >= 35:
-        st.success("Outstanding efficiency! Probably a legend like the Civic!")
+        st.success("🚀 Outstanding! Most likely a Japanese economy car — sips fuel!")
         st.balloons()
     elif mpg >= 28:
-        st.success("Excellent fuel economy — sips fuel like a pro!")
+        st.success("✅ Excellent efficiency for the era!")
     elif mpg >= 20:
-        st.info("Solid for the era — balanced power and efficiency")
+        st.info("👍 Solid balance of power and economy")
     else:
-        st.warning("Classic American muscle — drinks fuel, but sounds epic!")
+        st.warning("💪 Classic American muscle — drinks gas, but sounds amazing!")
 
-# ==================== FOOTER ====================
-st.markdown(
-    "<p style='text-align:center; color:#94a3b8; margin-top:100px; font-size:16px; font-weight:600;'>"
-    "Big blocks, small Civics, and everything that makes car lovers smile — this one’s for you! ❤️ from Arun</p>",
-    unsafe_allow_html=True
-)
+# ==================== FOOTER WITH NETWORKING (USING STREAMLIT COLUMNS & IMAGES) ====================
+# ==================== FOOTER WITH ONLY CLICKABLE LOGOS (NO LABELS) ====================
+st.markdown("---")
+st.markdown("<h3 style='text-align:center; margin-bottom:30px;'>Big blocks, small Civics, and everything that makes car lovers smile — this one’s for you! ❤️ Arun</h3>", unsafe_allow_html=True)
+
+# Social Icons Row
+st.markdown("""
+<div style="display:flex; justify-content:center; gap:60px; margin:40px 0;">
+    <a href="https://www.linkedin.com/in/your-linkedin" target="_blank" title="LinkedIn" style="text-decoration:none;">
+        <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" width="60" height="60" style="transition:0.3s;">
+    </a>
+    <a href="https://github.com/your-github" target="_blank" title="GitHub" style="text-decoration:none;">
+        <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" width="60" height="60" style="transition:0.3s;">
+    </a>
+    <a href="mailto:your@email.com" title="Email" style="text-decoration:none;">
+        <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" width="60" height="60" style="transition:0.3s;">
+    </a>
+    <a href="https://your-portfolio.com" target="_blank" title="Portfolio" style="text-decoration:none;">
+        <img src="D:\DATA SCIENCE\ML\PROJECTS\MPG_REG\assets\pf.png" width="60" height="60" style="transition:0.3s;">
+    </a>
+</div>
+
+<style>
+    div a img:hover {
+        transform: translateY(-10px) scale(1.2);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+</style>
+""", unsafe_allow_html=True)
+
+st.caption("Built with Streamlit • Random Forest Model • UCI Auto MPG Dataset")
