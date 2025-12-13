@@ -191,16 +191,16 @@ st.markdown("<h3 style='text-align:center; margin-bottom:30px;'>Big blocks, smal
 # Social Icons Row
 st.markdown("""
 <div style="display:flex; justify-content:center; gap:60px; margin:40px 0;">
-    <a href="https://www.linkedin.com/in/your-linkedin" target="_blank" title="LinkedIn" style="text-decoration:none;">
+    <a href="https://www.linkedin.com/in/vadlamudi-arun-kumar/" target="_blank" title="LinkedIn" style="text-decoration:none;">
         <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" width="60" height="60" style="transition:0.3s;">
     </a>
-    <a href="https://github.com/your-github" target="_blank" title="GitHub" style="text-decoration:none;">
+    <a href="https://github.com/VAKGK" target="_blank" title="GitHub" style="text-decoration:none;">
         <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" width="60" height="60" style="transition:0.3s;">
     </a>
-    <a href="mailto:your@email.com" title="Email" style="text-decoration:none;">
+    <a href="vadlamudiarunkumar3@gmail.com" title="Email" style="text-decoration:none;">
         <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" width="60" height="60" style="transition:0.3s;">
     </a>
-    <a href="https://your-portfolio.com" target="_blank" title="Portfolio" style="text-decoration:none;">
+    <a href="https://codebasics.io/portfolio/VADLAMUDI-ARUN-KUMAR target="_blank" title="Portfolio" style="text-decoration:none;">
         <img src="D:\DATA SCIENCE\ML\PROJECTS\MPG_REG\assets\pf.png" width="60" height="60" style="transition:0.3s;">
     </a>
 </div>
