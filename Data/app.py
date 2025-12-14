@@ -244,27 +244,112 @@ if st.button("Predict Fuel Efficiency Now!", type="primary", use_container_width
         st.warning("💪 Raw American power — efficiency takes a back seat!")
 
 # ==================== FOOTER ====================
-st.markdown("---")
-st.markdown("<h3 style='text-align:center; margin:50px 0; color:#E67E22;'>Big blocks, small Civics, and everything that makes car lovers smile — this one’s for you! ❤️ Arun</h3>", unsafe_allow_html=True)
-
 st.markdown("""
-<div style="display:flex; justify-content:center; gap:70px; margin:60px 0;">
-    <a href="https://www.linkedin.com/in/vadlamudi-arun-kumar/" target="_blank">
-        <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" width="65" height="65">
-    </a>
-    <a href="https://github.com/VAKGK" target="_blank">
-        <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" width="65" height="65">
-    </a>
-    <a href="mailto:vadlamudiarunkumar3@gmail.com">
-        <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" width="65" height="65">
-    </a>
-    <a href="https://codebasics.io/portfolio/VADLAMUDI-ARUN-KUMAR" target="_blank" title="Portfolio">
-        <img src="https://cdn-icons-png.flaticon.com/128/10856/10856864.png" width="60" height="60" style="transition:0.3s;">
-    </a>
-    
+<style>
+.fade-text {
+    text-align: center;
+    margin: 50px 0;
+    color: #E67E22;
+    font-size: 1.6rem;
+    font-weight: 600;
+    animation: fadeInOut 5s ease-in-out infinite;
+}
+
+@keyframes fadeInOut {
+    0%   { opacity: 0.2; }
+    50%  { opacity: 1; }
+    100% { opacity: 0.2; }
+}
+</style>
+
+<hr>
+
+<div class="fade-text">
+    Big blocks, small Civics, and everything that makes car lovers smile — this one’s for you! ❤️ Arun
 </div>
 """, unsafe_allow_html=True)
 
-st.caption("Built with passion using Streamlit • Machine Learning • Classic Auto MPG Dataset")
+
+import streamlit.components.v1 as components
+
+components.html(
+    """
+    <style>
+        .social-container {
+            display: flex;
+            justify-content: center;
+            gap: 70px;
+            margin: 60px 0;
+        }
+
+        .social-container img {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            transition: all 0.35s ease;
+        }
+
+        .social-container img:hover {
+            transform: translateY(-10px) scale(1.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+        }
+    </style>
+
+    <div class="social-container">
+
+        <a href="https://www.linkedin.com/in/vadlamudi-arun-kumar/" target="_blank">
+            <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png">
+        </a>
+
+        <a href="https://github.com/VAKGK" target="_blank">
+            <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png">
+        </a>
+
+        <a href="mailto:vadlamudiarunkumar3@gmail.com">
+            <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png">
+        </a>
+
+        <a href="https://codebasics.io/portfolio/VADLAMUDI-ARUN-KUMAR" target="_blank">
+            <img src="https://cdn-icons-png.flaticon.com/128/10856/10856864.png">
+        </a>
+
+    </div>
+    """,
+    height=160
+)
 
 
+
+st.markdown("""
+<style>
+.scrolling-text {
+    white-space: nowrap;
+    overflow: hidden;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.scrolling-text span {
+    display: inline-block;
+    padding-left: 100%;
+    animation: scroll-left 20s linear infinite;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #6B7280;
+}
+
+@keyframes scroll-left {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(0%);
+    }
+}
+
+</style>
+
+<div class="scrolling-text">
+    <span>Built with passion using Streamlit • Machine Learning (Linear Regression Model) • Classic Auto MPG Dataset</span>
+</div>
+""", unsafe_allow_html=True)
