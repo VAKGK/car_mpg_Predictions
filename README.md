@@ -1,56 +1,65 @@
 **Car Mileage Prediction**
 
-
-📌 **Overview**
-
 This project predicts a car’s mileage (MPG) using machine learning techniques in Python. It includes data cleaning, feature scaling, model training, evaluation, and saving the trained model as .joblib files.
 
 🔧 **Technologies Used**
-Python
 
-NumPy, Pandas
+➡️Python
 
-Seaborn, Matplotlib
+➡️NumPy, Pandas
 
-Scikit-Learn
+➡️Seaborn, Matplotlib
 
-Joblib
+➡️Scikit-Learn
 
-Jupyter Notebook / Pycharm
+➡️Joblib
+
+➡️Jupyter Notebook / Pycharm
 
 📊 **Model Performance**
 
-R² Score: 0.85
+➡️R² Score: 0.85
 
-MAE: 2.25
+➡️MAE: 2.25
 
-MSE: 8.20
+➡️MSE: 8.20
 
 🧠 **Model Pipeline**
 
-Data Cleaning
+➡️Data Cleaning
 
-Handling Missing Values
+➡️Handling Missing Values
 
-Train–Test Split
+➡️Train–Test Split
 
-Feature Scaling
+➡️Feature Scaling
 
-Model Training (Linear Regression)
+➡️Model Training (Linear Regression)
 
-Evaluation
+➡️Evaluation
 
-Saving Model
+➡️Saving Model as .joblib
+
+**📱 Web App Features**
+
+➡️Interactive Streamlit dashboard with real-time churn prediction (https://carmpgpredictions.streamlit.app/)
+
+➡️Preset profiles
+
+➡️Professional themed UI with hover effects
+
+➡️Detailed feature explanations in expandable help section
 
 📁 **Project Files**
 
-car_mileage_model.joblib – Trained model
+➡️car_mileage_model.joblib – Trained model
 
-scaler.joblib – Saved StandardScaler
+➡️scaler.joblib – Saved StandardScaler
 
-notebook.ipynb – Workflow notebook
+➡️notebook.ipynb – Workflow notebook
 
-README.md – Project documentation
+➡️README.md – Project documentation
 
-<img width="917" height="646" alt="image" src="https://github.com/user-attachments/assets/9e3a7449-335e-4b04-9397-283411b228f9" />
+<img width="1835" height="872" alt="image" src="https://github.com/user-attachments/assets/e07f1db8-c444-46fb-ab99-50c334e45bee" />
+
 
